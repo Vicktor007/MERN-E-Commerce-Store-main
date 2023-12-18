@@ -16,7 +16,7 @@ const ProductList = () => {
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState("");
   const [brand, setBrand] = useState("");
-  const [stock, setStock] = useState(0);
+  // const [stock, setStock] = useState();
   const [imageUrl, setImageUrl] = useState(null);
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ const ProductList = () => {
       productData.append("category", category);
       productData.append("quantity", quantity);
       productData.append("brand", brand);
-      productData.append("countInStock", stock);
+      // productData.append("countInStock", stock);
 
       const { data } = await createProduct(productData);
 
@@ -151,16 +151,7 @@ const ProductList = () => {
             ></textarea>
 
             <div className="flex justify-between">
-              <div>
-                <label htmlFor="name block">Count In Stock</label> <br />
-                <input
-                  type="text"
-                  className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
-                  value={stock}
-                  onChange={(e) => setStock(e.target.value)}
-                />
-              </div>
-
+              
               <div>
                 <label htmlFor="">Category</label> <br />
                 <select

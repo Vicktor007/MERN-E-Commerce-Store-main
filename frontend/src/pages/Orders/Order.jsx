@@ -211,7 +211,7 @@ const Order = () => {
         )}
 
         {loadingDeliver && <Loader />}
-        {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+        {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered ? (
           <div>
             <button
               type="button"
@@ -221,7 +221,7 @@ const Order = () => {
               Mark As Delivered
             </button>
           </div>
-        )}
+        ): (<div className="text-center bg-green-400 w-[6rem] w-full py-2">Delivered</div>)}
       </div>
     </div>
   );
