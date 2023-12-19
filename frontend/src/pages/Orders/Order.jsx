@@ -51,10 +51,13 @@ const Order = () => {
       if (order && !order.isPaid) {
         if (!window.paypal) {
           loadingPaPalScript();
+          
         }
       }
     }
   }, [errorPayPal, loadingPaPal, order, paypal, paypalDispatch]);
+
+ 
 
   function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
@@ -211,7 +214,7 @@ const Order = () => {
         )}
 
         {loadingDeliver && <Loader />}
-        {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered ? (
+        {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
           <div>
             <button
               type="button"
@@ -221,7 +224,16 @@ const Order = () => {
               Mark As Delivered
             </button>
           </div>
-        ): (<div className="text-center bg-green-400 w-[6rem] w-full py-2">Delivered</div>)}
+        )}
+        {order.isPaid && (
+          <div>
+            {!order.isDelivered ? (<div className="text-center bg-pink-500  mt-4 w-full py-2">Not Yet Delivered</div>)
+        :
+        (<div className="text-center bg-green-400  w-full py-2">Delivered</div>)}
+          </div>
+        )}
+        
+
       </div>
     </div>
   );
