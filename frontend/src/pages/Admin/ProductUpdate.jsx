@@ -33,7 +33,7 @@ const AdminProductUpdate = () => {
   const navigate = useNavigate();
 
   // Fetch categories using RTK Query
-  const { data: categories = [] } = useFetchCategoriesQuery();
+  const { data: categories = [], refetch } = useFetchCategoriesQuery();
 
   const [uploadProductImage] = useUploadProductImageMutation();
 
@@ -131,6 +131,10 @@ const AdminProductUpdate = () => {
       });
     }
   };
+
+  const productCategory = "Choose Category";
+
+  
 
 
   return (
@@ -234,16 +238,18 @@ const AdminProductUpdate = () => {
                 <div>
                   <label htmlFor="">Category</label> <br />
                   <select
-                    placeholder="Choose Category"
-                    className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white mr-[5rem]"
+                   className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white mr-[5rem]"
                     onChange={(e) => setCategory(e.target.value)}
-                  >
-                    {categories?.map((c) => (
-                      <option key={c._id} value={c._id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
+                             >
+                            <option value="" disabled selected>Choose Category</option>
+
+                          {categories?.map((c) => (
+                          <option key={c._id} value={c._id}>
+                           {c.name}
+                           </option>
+                            ))}
+                          </select>
+
                 </div>
               </div>
 

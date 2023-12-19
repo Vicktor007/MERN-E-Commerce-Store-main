@@ -152,20 +152,21 @@ const ProductList = () => {
 
             <div className="flex justify-between">
               
-              <div>
-                <label htmlFor="">Category</label> <br />
-                <select
-                  placeholder="Choose Category"
-                  className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  {categories?.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div>
+  <label htmlFor="">Category</label> <br />
+  <select
+    className="p-4 mb-3 w-[30rem] border rounded-lg bg-[#101011] text-white"
+    onChange={(e) => setCategory(e.target.value)}
+  >
+    <option value="" disabled selected>Choose Category</option>
+    {categories?.map((c) => (
+      <option key={c._id} value={c._id}>
+        {c.name}
+      </option>
+    ))}
+  </select>
+</div>
+
             </div>
 
             <button
