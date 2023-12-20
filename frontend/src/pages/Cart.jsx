@@ -7,6 +7,8 @@ const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { userInfo } = useSelector((state) => state.auth);
+
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
@@ -19,7 +21,11 @@ const Cart = () => {
   };
 
   const checkoutHandler = () => {
-    navigate("/login?redirect=/shipping");
+    if(userInfo) {
+      navigate("/login?redirect=/shipping");
+    } else {
+      navigate("/register");
+    }
   };
 
   return (
@@ -95,13 +101,15 @@ const Cart = () => {
                       .toFixed(2)}
                   </div>
 
-                  <button
+                
+                  {userInfo ? (<button
                     className="bg-pink-500 mt-4 py-2 px-4 rounded-full text-lg w-full"
                     disabled={cartItems.length === 0}
                     onClick={checkoutHandler}
                   >
                     Proceed To Checkout
-                  </button>
+                  </button>): ( <div><button className="bg-pink-500 mt-5 py-2 px-4 rounded-full text-lg w-full"><Link to={"/register"}
+                  >Create An Account</Link></button> {" "} or {" "} <Link to={"/login"} className=" mt-5 text-pink-500 text-lg">Sign in</Link></div>)}
                 </div>
               </div>
             </div>

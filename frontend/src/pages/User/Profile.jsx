@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 import Loader from "../../components/Loader";
-import { useProfileMutation } from "../../redux/api/usersApiSlice";
-import { setCredentials } from "../../redux/features/auth/authSlice";
-import { Link } from "react-router-dom";
+import { useDeleteUserMutation, useProfileMutation } from "../../redux/api/usersApiSlice";
+import { logout, setCredentials } from "../../redux/features/auth/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [username, setUserName] = useState("");
@@ -17,6 +17,9 @@ const Profile = () => {
 
   const [updateProfile, { isLoading: loadingUpdateProfile }] =
     useProfileMutation();
+
+    const [deleteUser] = useDeleteUserMutation();
+    const navigate = useNavigate();
 
   useEffect(() => {
     setUserName(userInfo.username);
@@ -45,6 +48,20 @@ const Profile = () => {
     }
   };
 
+
+  const deleteHandler = async (id, e) => {
+    e.preventDefault();
+    if (window.confirm("Are you sure")) {
+      try {
+        await deleteUser(id);
+        dispatch(logout());
+        navigate("/register");
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
+  };
+  
   return (
     <div className="container mx-auto p-4 mt-[10rem]">
       <div className="flex justify-center align-center md:flex md:space-x-4">
@@ -103,12 +120,13 @@ const Profile = () => {
                 Update
               </button>
 
-              <Link
-                to="/userOrder"
-                className="bg-pink-600 text-white py-2 px-4 rounded hover:bg-pink-700"
-              >
-                My Orders
-              </Link>
+              <button
+  className="bg-pink-500 text-white py-2 px-4 rounded hover:bg-pink-600"
+  onClick={(e) => deleteHandler(userInfo._id, e)}
+>
+  Delete My Account
+</button>
+
             </div>
             {loadingUpdateProfile && <Loader />}
           </form>

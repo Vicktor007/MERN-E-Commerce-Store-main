@@ -11,6 +11,7 @@ import {
   updateUserById,
   forgotPassword,
   resetPassword,
+  deleteUserAccount,
 } from "../controllers/userController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -26,6 +27,7 @@ router.post("/auth", loginUser);
 router.post("/logout", logoutCurrentUser);
 router.post("/forgotpassword", forgotPassword);
 router.put("/resetpassword/:resetToken", resetPassword);
+router.delete("/deleteaccount/:id", authenticate, deleteUserAccount);
 
 
 router
@@ -36,7 +38,7 @@ router
 // ADMIN ROUTES 👇
 router
   .route("/:id")
-  .delete(authenticate, authorizeAdmin, deleteUserById)
+  .delete(authenticate,  deleteUserById)
   .get(authenticate, authorizeAdmin, getUserById)
   .put(authenticate, authorizeAdmin, updateUserById);
 

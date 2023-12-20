@@ -271,6 +271,29 @@ const resetPassword = asyncHandler (async (req, res) =>{
 })
 
 
+
+const deleteUserAccount = async (req, res) => {
+  try {
+    // Get user id from request
+    const userId = req.user._id;
+    // Delete the user
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json({
+      status: 'success',
+      message: 'User account deleted successfully',
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      
+      status: 'error',
+      message: 'An error occurred while trying to delete the account',
+    });
+  }
+};
+
+
 export {
   createUser,
   loginUser,
@@ -282,5 +305,6 @@ export {
   getUserById,
   updateUserById,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  deleteUserAccount
 };
