@@ -84,9 +84,9 @@ const OrderList = () => {
                 </td>
 
                 <td>
-                  <Link to={`/order/${order._id}`}>
-                    <button>More</button>
-                  </Link>
+                {order.user ? (<Link to={`/order/${order._id}`}>
+                    <button>More details</button>
+                  </Link>) : ("Order not available")}
                 </td>
               </tr>
             ))}
