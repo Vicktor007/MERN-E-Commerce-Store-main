@@ -77,7 +77,8 @@ const CategoryList = () => {
     }
   };
 
-  const handleDeleteCategory = async () => {
+  const handleDeleteCategory = async (e) => {
+    e.preventDefault();
     try {
       const result = await deleteCategory(selectedCategory._id).unwrap();
 

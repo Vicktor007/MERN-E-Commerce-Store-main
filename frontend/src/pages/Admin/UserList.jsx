@@ -10,7 +10,8 @@ import {
 import { toast } from "react-toastify";
 // ⚠️⚠️⚠️ don't forget this ⚠️⚠️⚠️⚠️
 import AdminMenu from "./AdminMenu";
-import { useNavigate } from "react-router";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const UserList = () => {
   const { data: users, refetch, isLoading, error } = useGetUsersQuery();
@@ -28,16 +29,37 @@ const UserList = () => {
     refetch();
   }, [refetch]);
 
+
+
   const deleteHandler = async (id) => {
-    if (window.confirm("Are you sure")) {
-      try {
-        await deleteUser(id);
-        refetch();
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
+
+    try {
+      await deleteUser(id);
+      refetch();
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
-  };
+};
+
+const confirmDelete = (id) => {
+ 
+  confirmAlert({
+    title: "Delete Your Account",
+    message: "Are you sure you want to delete Your Account?.",
+    buttons: [
+      {
+        label: "Delete",
+        onClick: () => deleteHandler(id),
+      },
+      {
+        label: "Cancel",
+        
+      },
+    ],
+  });
+};
+
+
 
   const toggleEdit = (id, username, email) => {
     setEditableUserId(id);
@@ -173,7 +195,7 @@ const UserList = () => {
                     {!user.isAdmin && (
                       <div className="flex">
                         <button
-                          onClick={() => deleteHandler(user._id)}
+                          onClick={() => confirmDelete(user._id)}
                           className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                         >
                           <FaTrash />

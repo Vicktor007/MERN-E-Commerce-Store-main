@@ -9,7 +9,8 @@ import {
 } from "../../redux/api/productApiSlice";
 import { useFetchCategoriesQuery } from "../../redux/api/categoryApiSlice";
 import { toast } from "react-toastify";
-
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const AdminProductUpdate = () => {
   const params = useParams();
@@ -112,10 +113,6 @@ const AdminProductUpdate = () => {
 
   const handleDelete = async () => {
     try {
-      let answer = window.confirm(
-        "Are you sure you want to delete this product?"
-      );
-      if (!answer) return;
 
       const { data } = await deleteProduct(params._id);
       toast.success(`"${data.name}" is deleted`, {
@@ -132,7 +129,26 @@ const AdminProductUpdate = () => {
     }
   };
 
+
+
+const confirmDelete = (id) => {
   
+  confirmAlert({
+    title: "Delete Your Account",
+    message: "Are you sure you want to delete Your Account?.",
+    buttons: [
+      {
+        label: "Delete",
+        onClick: () => handleDelete(id),
+      },
+      {
+        label: "Cancel",
+        
+      },
+    ],
+  });
+};
+
 
   
 
@@ -261,7 +277,7 @@ const AdminProductUpdate = () => {
                   Update
                 </button>
                 <button
-                  onClick={handleDelete}
+                  onClick={confirmDelete}
                   className="py-4 px-10 mt-5 rounded-lg text-lg font-bold  bg-pink-600"
                 >
                   Delete
