@@ -1,39 +1,60 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Loader from "../../components/Loader";
-import { useLoginMutation } from "../../redux/api/usersApiSlice";
-import { setCredentials } from "../../redux/features/auth/authSlice";
+import { useResetPasswordMutation } from "../../redux/api/usersApiSlice";
 import { toast } from "react-toastify";
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+const initialState = {
+    password: "",
+    password2: "",
+}
+
+const ResetPassword = () => {
+  const [formData, setFormData] = useState(initialState);
+  const {password, password2} = formData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [reset, { isLoading }] = useResetPasswordMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
-
-  const { search } = useLocation();
-  const sp = new URLSearchParams(search);
-  const redirect = sp.get("redirect") || "/";
-
-  useEffect(() => {
-    if (userInfo) {
-      navigate(redirect);
-    }
-  }, [navigate, redirect, userInfo]);
+  
+ 
+  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  
+   
+  const { resetToken } = useParams();
+  console.log(resetToken)
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (!resetToken) {
+        return toast.error("Reset token is not available");
+      }
+
+    if (password.length < 6) {
+        return toast.error("Passwords must be up to 6 characters");
+      }
+      if (password !== password2) {
+        return toast.error("Passwords do not match");
+      }
+  
+      const userData = {
+        password,
+        password2,
+        resetToken
+      };
     try {
-      const res = await login({ email, password }).unwrap();
+      const res = await reset({userData, resetToken });
       console.log(res);
-      dispatch(setCredentials({ ...res }));
-      navigate(redirect);
+      navigate("/login");
+      toast.success("Password reset successful");
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -43,25 +64,11 @@ const Login = () => {
     <div>
       <section className="pl-[10rem] flex flex-wrap">
         <div className="mr-[4rem] mt-[5rem]">
-          <h1 className="text-2xl font-semibold mb-4">Sign In</h1>
+          <h1 className="text-2xl font-semibold mb-4">Reset Password</h1>
 
           <form onSubmit={submitHandler} className="container w-[40rem]">
-            <div className="my-[2rem]">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-white"
-              >
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="mt-1 p-2 border rounded w-full"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+        
+           
 
             <div className="mb-4">
               <label
@@ -76,7 +83,26 @@ const Login = () => {
                 className="mt-1 p-2 border rounded w-full"
                 placeholder="Enter password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-white"
+              >
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                id="password2"
+                name="password2"
+                className="mt-1 p-2 border rounded w-full"
+                placeholder="Enter password"
+                value={password2}
+                onChange={handleInputChange}
               />
             </div>
 
@@ -85,7 +111,7 @@ const Login = () => {
               type="submit"
               className="bg-pink-500 text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
             >
-              {isLoading ? "Signing In..." : "Sign In"}
+              {isLoading ? "Reseting password..." : "Reset Password"}
             </button>{" "}
             <Link className="text-pink-500" to="/forgotpassword">Forgot Password</Link>
 
@@ -96,7 +122,7 @@ const Login = () => {
             <p className="text-white">
               New Customer?{" "}
               <Link
-                to={redirect ? `/register?redirect=${redirect}` : "/register"}
+                to={"/register"}
                 className="text-pink-500 hover:underline"
               >
                 Register
@@ -114,4 +140,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;

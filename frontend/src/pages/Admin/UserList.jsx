@@ -10,11 +10,13 @@ import {
 import { toast } from "react-toastify";
 // ⚠️⚠️⚠️ don't forget this ⚠️⚠️⚠️⚠️
 import AdminMenu from "./AdminMenu";
+import { useNavigate } from "react-router";
 
 const UserList = () => {
   const { data: users, refetch, isLoading, error } = useGetUsersQuery();
 
   const [deleteUser] = useDeleteUserMutation();
+  const navigate = useNavigate();
 
   const [editableUserId, setEditableUserId] = useState(null);
   const [editableUserName, setEditableUserName] = useState("");
@@ -49,6 +51,7 @@ const UserList = () => {
         userId: id,
         username: editableUserName,
         email: editableUserEmail,
+        
       });
       setEditableUserId(null);
       refetch();
