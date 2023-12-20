@@ -112,10 +112,6 @@ const AdminProductUpdate = () => {
 
   const handleDelete = async () => {
     try {
-      let answer = window.confirm(
-        "Are you sure you want to delete this product?"
-      );
-      if (!answer) return;
 
       const { data } = await deleteProduct(params._id);
       toast.success(`"${data.name}" is deleted`, {
@@ -131,6 +127,27 @@ const AdminProductUpdate = () => {
       });
     }
   };
+
+
+
+const confirmDelete = (id) => {
+  
+  confirmAlert({
+    title: "Delete Your Account",
+    message: "Are you sure you want to delete Your Account?.",
+    buttons: [
+      {
+        label: "Delete",
+        onClick: () => handleDelete(id),
+      },
+      {
+        label: "Cancel",
+        
+      },
+    ],
+  });
+};
+
 
   
 
@@ -261,7 +278,7 @@ const AdminProductUpdate = () => {
                   Update
                 </button>
                 <button
-                  onClick={handleDelete}
+                  onClick={confirmDelete}
                   className="py-4 px-10 mt-5 rounded-lg text-lg font-bold  bg-pink-600"
                 >
                   Delete
