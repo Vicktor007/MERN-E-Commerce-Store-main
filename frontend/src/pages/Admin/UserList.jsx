@@ -57,6 +57,20 @@ const UserList = () => {
     }
   };
 
+  const toggleAdminStatus = async (id, isAdmin) => {
+    if (window.confirm(`Are you sure you want to make this user ${isAdmin ? 'not an admin' : 'an admin'}?`)) {
+      try {
+        await updateUser({
+          userId: id,
+          isAdmin: !isAdmin,
+        });
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-semibold mb-4">Users</h1>
@@ -142,11 +156,15 @@ const UserList = () => {
                     )}
                   </td>
                   <td className="px-4 py-2">
-                    {user.isAdmin ? (
-                      <FaCheck style={{ color: "green" }} />
-                    ) : (
-                      <FaTimes style={{ color: "red" }} />
-                    )}
+                  {user.isAdmin ? (
+                  <button onClick={() => toggleAdminStatus(user._id, user.isAdmin)}>
+                    <FaCheck style={{ color: "green" }} />
+                  </button>
+                ) : (
+                  <button onClick={() => toggleAdminStatus(user._id, user.isAdmin)}>
+                    <FaTimes style={{ color: "red" }} />
+                  </button>
+                )}
                   </td>
                   <td className="px-4 py-2">
                     {!user.isAdmin && (
