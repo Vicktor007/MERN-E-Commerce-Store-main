@@ -15,7 +15,7 @@ const ResetPassword = () => {
   const [formData, setFormData] = useState(initialState);
   const {password, password2} = formData;
 
-  const dispatch = useDispatch();
+ 
   const navigate = useNavigate();
 
   const [reset, { isLoading }] = useResetPasswordMutation();

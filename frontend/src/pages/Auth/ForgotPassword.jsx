@@ -10,7 +10,7 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
 
 
-  const dispatch = useDispatch();
+  
   const navigate = useNavigate();
 
   const [send, { isLoading }] = useForgotPasswordMutation();
