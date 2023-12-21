@@ -31,25 +31,32 @@ const UserList = () => {
 
 
 
-  const deleteHandler = async (id) => {
+//   const deleteHandler = async (id) => {
 
-    try {
-      await deleteUser(id);
-      refetch();
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
-    }
-};
+//     try {
+//       await deleteUser(id);
+//       refetch();
+//     } catch (err) {
+//       toast.error(err?.data?.message || err.error);
+//     }
+// };
 
 const confirmDelete = (id) => {
  
   confirmAlert({
     title: "Delete Your Account",
-    message: "Are you sure you want to delete Your Account?.",
+    message: "Are you sure you want to delete This User's Account?.",
     buttons: [
       {
         label: "Delete",
-        onClick: () => deleteHandler(id),
+        onClick: async () => {
+          try {
+            await deleteUser(id);
+            refetch();
+          } catch (err) {
+            toast.error(err?.data?.message || err.error);
+          }
+        }
       },
       {
         label: "Cancel",
@@ -83,17 +90,29 @@ const confirmDelete = (id) => {
   };
 
   const toggleAdminStatus = async (id, isAdmin) => {
-    if (window.confirm(`Are you sure you want to make this user ${isAdmin ? 'not an admin' : 'an admin'}?`)) {
-      try {
-        await updateUser({
-          userId: id,
-          isAdmin: !isAdmin,
-        });
-        refetch();
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
-    }
+    confirmAlert({
+      title: "Change Admin Status",
+      message: `Are you sure you want to make this user ${isAdmin ? 'not an admin' : 'an admin'}?`,
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            try {
+              await updateUser({
+                userId: id,
+                isAdmin: !isAdmin,
+              });
+              refetch();
+            } catch (err) {
+              toast.error(err?.data?.message || err.error);
+            }
+          }
+        },
+        {
+          label: "No",
+        }
+      ]
+    });
   };
 
   return (
@@ -181,15 +200,13 @@ const confirmDelete = (id) => {
                     )}
                   </td>
                   <td className="px-4 py-2">
-                  {user.isAdmin ? (
                   <button onClick={() => toggleAdminStatus(user._id, user.isAdmin)}>
-                    <FaCheck style={{ color: "green" }} />
-                  </button>
-                ) : (
-                  <button onClick={() => toggleAdminStatus(user._id, user.isAdmin)}>
-                    <FaTimes style={{ color: "red" }} />
-                  </button>
-                )}
+                       {user.isAdmin ? (
+                     <FaCheck style={{ color: "green" }} />
+                      ) : (
+                      <FaTimes style={{ color: "red" }} />
+                         )}
+                         </button>
                   </td>
                   <td className="px-4 py-2">
                     {!user.isAdmin && (
