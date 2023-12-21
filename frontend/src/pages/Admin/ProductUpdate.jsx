@@ -112,43 +112,39 @@ const AdminProductUpdate = () => {
     }
   };
 
-  const handleDelete = async () => {
-    try {
-
-      const { data } = await deleteProduct(params._id);
-      toast.success(`"${data.name}" is deleted`, {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
-      navigate("/admin/allproductslist");
-    } catch (err) {
-      console.log(err);
-      toast.error("Delete failed. Try again.", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
-    }
-  };
-
-
-
-const confirmDelete = (id) => {
+  const confirmDelete = () => {
   
-  confirmAlert({
-    title: "Delete Your Account",
-    message: "Are you sure you want to delete Your Account?.",
-    buttons: [
-      {
-        label: "Delete",
-        onClick: () => handleDelete(id),
-      },
-      {
-        label: "Cancel",
-        
-      },
-    ],
-  });
-};
+    confirmAlert({
+      title: "Delete Product",
+      message: "Are you sure you want to delete This Product?.",
+      buttons: [
+        {
+          label: "Delete",
+          onClick: async () => {
+            try {
+  
+              const { data } = await deleteProduct(params._id);
+              toast.success(`"${data.name}" is deleted`, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000,
+              });
+              navigate("/admin/allproductslist");
+            } catch (err) {
+              console.log(err);
+              toast.error("Delete failed. Try again.", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 2000,
+              });
+            }
+          }
+        },
+        {
+          label: "Cancel",
+          
+        },
+      ],
+    });
+  };
 
 
   
