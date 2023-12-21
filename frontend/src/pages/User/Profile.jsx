@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import Loader from "../../components/Loader";
 import { useDeleteUserMutation, useProfileMutation } from "../../redux/api/usersApiSlice";
 import { logout, setCredentials } from "../../redux/features/auth/authSlice";
@@ -49,18 +50,35 @@ const Profile = () => {
   };
 
 
-  const deleteHandler = async (id, e) => {
-    e.preventDefault();
-    if (window.confirm("Are you sure")) {
-      try {
-        await deleteUser(id);
-        dispatch(logout());
-        navigate("/register");
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
+  const deleteHandler = async (id) => {
+
+    try {
+      await deleteUser(id);
+      dispatch(logout());
+      navigate("/register");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
-  };
+};
+
+const confirmDelete = (id, e) => {
+  e.preventDefault();
+  confirmAlert({
+    title: "Delete Your Account",
+    message: "Are you sure you want to delete Your Account?.",
+    buttons: [
+      {
+        label: "Delete",
+        onClick: (e) => deleteHandler(id, e),
+      },
+      {
+        label: "Cancel",
+        
+      },
+    ],
+  });
+};
+
   
   return (
     <div className="container mx-auto p-4 mt-[10rem]">
@@ -122,7 +140,7 @@ const Profile = () => {
 
               <button
   className="bg-pink-500 text-white py-2 px-4 rounded hover:bg-pink-600"
-  onClick={(e) => deleteHandler(userInfo._id, e)}
+  onClick={(e) => confirmDelete(userInfo._id, e)}
 >
   Delete My Account
 </button>
