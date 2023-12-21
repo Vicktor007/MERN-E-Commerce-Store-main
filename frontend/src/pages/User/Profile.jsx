@@ -50,17 +50,6 @@ const Profile = () => {
   };
 
 
-  const deleteHandler = async (id) => {
-
-    try {
-      await deleteUser(id);
-      dispatch(logout());
-      navigate("/register");
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
-    }
-};
-
 const confirmDelete = (id, e) => {
   e.preventDefault();
   confirmAlert({
@@ -69,7 +58,15 @@ const confirmDelete = (id, e) => {
     buttons: [
       {
         label: "Delete",
-        onClick: (e) => deleteHandler(id, e),
+        onClick: async (e) =>{ 
+          try {
+          await deleteUser(id);
+          dispatch(logout());
+          navigate("/register");
+        } catch (err) {
+          toast.error(err?.data?.message || err.error);
+        }
+      }
       },
       {
         label: "Cancel",
@@ -139,11 +136,11 @@ const confirmDelete = (id, e) => {
               </button>
 
               <button
-  className="bg-pink-500 text-white py-2 px-4 rounded hover:bg-pink-600"
-  onClick={(e) => confirmDelete(userInfo._id, e)}
->
-  Delete My Account
-</button>
+               className="bg-pink-500 text-white py-2 px-4 rounded hover:bg-pink-600"
+                  onClick={(e) => confirmDelete(userInfo._id, e)}
+                  >
+                  Delete My Account
+                  </button>
 
             </div>
             {loadingUpdateProfile && <Loader />}
