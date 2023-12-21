@@ -31,15 +31,7 @@ const UserList = () => {
 
 
 
-//   const deleteHandler = async (id) => {
 
-//     try {
-//       await deleteUser(id);
-//       refetch();
-//     } catch (err) {
-//       toast.error(err?.data?.message || err.error);
-//     }
-// };
 
 const confirmDelete = (id) => {
  
