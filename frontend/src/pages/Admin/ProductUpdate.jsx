@@ -258,7 +258,6 @@ const confirmDelete = () => {
                     onChange={(e) => setCategory(e.target.value)}
                              >
                             <option value="" disabled selected>Choose Category</option>
-
                           {categories?.map((c) => (
                           <option key={c._id} value={c._id}>
                            {c.name}
